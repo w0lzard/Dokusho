@@ -6,8 +6,8 @@ import com.ryuken.dokusho.core.presentation.UiText
 data class BookListState(
     val searchQuery: String = "One Piece",
     val searchResults: List<Book> = books,
-    val favouriteBooks: List<Book> = emptyList(),
-    val isLoading: Boolean = false,
+    val favoriteBooks: List<Book> = emptyList(),
+    val isLoading: Boolean = true,
     val selectedTabIndex: Int = 0,
     val errorMessage: UiText? = null
 )

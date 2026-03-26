@@ -40,11 +40,11 @@ import com.ryuken.dokusho.book.presentation.book_list.components.BookSearchBar
 import com.ryuken.dokusho.core.presentation.DarkBlue
 import com.ryuken.dokusho.core.presentation.DesertWhite
 import com.ryuken.dokusho.core.presentation.SandYellow
-import dokusho.androidapp.generated.resources.Favourites
 import dokusho.androidapp.generated.resources.Res
-import dokusho.androidapp.generated.resources.Search_Results
-import dokusho.androidapp.generated.resources.no_favourite_books
+import dokusho.androidapp.generated.resources.favorites
+import dokusho.androidapp.generated.resources.no_favorite_books
 import dokusho.androidapp.generated.resources.no_search_results
+import dokusho.androidapp.generated.resources.search_results
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,7 +58,7 @@ fun BookListScreenRoot(
         state = state,
         onAction = { action ->
             when (action) {
-                is BookListAction.onBookClick -> onBookClick(action.book)
+                is BookListAction.OnBookClick -> onBookClick(action.book)
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -74,7 +74,7 @@ private fun BookListScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val pagerState = rememberPagerState { 2 }
     val searchResultsListState = rememberLazyListState()
-    val favouriteBooksListState = rememberLazyListState()
+    val favoriteBooksListState = rememberLazyListState()
     LaunchedEffect(state.searchResults) {
         searchResultsListState.animateScrollToItem(0)
     }
@@ -83,7 +83,7 @@ private fun BookListScreen(
     }
     LaunchedEffect(pagerState.currentPage) {
 
-        onAction(BookListAction.onTabSelected(pagerState.currentPage))
+        onAction(BookListAction.OnTabSelected(pagerState.currentPage))
     }
 
 
@@ -97,7 +97,7 @@ private fun BookListScreen(
         BookSearchBar(
             searchQuery = state.searchQuery,
             onSearchQueryChange = {
-                onAction(BookListAction.onSearchQueryChange(it))
+                onAction(BookListAction.OnSearchQueryChange(it))
             },
             onImeSearch = {
                 keyboardController?.hide()
@@ -131,28 +131,28 @@ private fun BookListScreen(
                 ) {
                     Tab(
                         selected = state.selectedTabIndex == 0,
-                        onClick = { onAction(BookListAction.onTabSelected(0)) },
+                        onClick = { onAction(BookListAction.OnTabSelected(0)) },
                         modifier = Modifier
                             .weight(1f),
                         selectedContentColor = SandYellow,
                         unselectedContentColor = Color.Black.copy(0.5f)
                     ) {
                         Text(
-                            text = stringResource(Res.string.Search_Results),
+                            text = stringResource(Res.string.search_results),
                             modifier = Modifier
                                 .padding(vertical = 12.dp),
                         )
                     }
                     Tab(
                         selected = state.selectedTabIndex == 1,
-                        onClick = { onAction(BookListAction.onTabSelected(1)) },
+                        onClick = { onAction(BookListAction.OnTabSelected(1)) },
                         modifier = Modifier
                             .weight(1f),
                         selectedContentColor = SandYellow,
                         unselectedContentColor = Color.Black.copy(0.5f)
                     ) {
                         Text(
-                            text = stringResource(Res.string.Favourites),
+                            text = stringResource(Res.string.favorites),
                             modifier = Modifier
                                 .padding(vertical = 12.dp),
                         )
@@ -194,7 +194,7 @@ private fun BookListScreen(
                                                 books = state.searchResults,
                                                 onBookClick = {
                                                     onAction(
-                                                        BookListAction.onBookClick(
+                                                        BookListAction.OnBookClick(
                                                             it
                                                         )
                                                     )
@@ -208,19 +208,19 @@ private fun BookListScreen(
                             }
 
                             1 -> {
-                                if (state.favouriteBooks.isEmpty()) {
+                                if (state.favoriteBooks.isEmpty()) {
                                     Text(
-                                        text = stringResource(Res.string.no_favourite_books),
+                                        text = stringResource(Res.string.no_favorite_books),
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = MaterialTheme.colorScheme.error
                                     )
                                 } else {
                                     BookList(
-                                        books = state.favouriteBooks,
-                                        onBookClick = { onAction(BookListAction.onBookClick(it)) },
+                                        books = state.favoriteBooks,
+                                        onBookClick = { onAction(BookListAction.OnBookClick(it)) },
                                         modifier = Modifier.fillMaxSize(),
-                                        scrollState = favouriteBooksListState
+                                        scrollState = favoriteBooksListState
                                     )
                                 }
                             }
