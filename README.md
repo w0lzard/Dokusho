@@ -31,8 +31,6 @@
   <img src="screenshots/favorites.png" width="250" alt="Favorites" />
 </p>
 
-> **Note:** Add your screenshots to the `screenshots/` directory:
-> `book_list.png`, `book_detail.png`, `favorites.png`
 
 ---
 
